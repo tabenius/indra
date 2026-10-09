@@ -37,6 +37,9 @@ and no analytics, remote dependencies, or JavaScript. It is ready for static
 See the [network plan](docs/indra-networks.md) for source observations, profile
 boundaries, and the evidence needed for future dual-network implementation.
 
+The [Android debug link](docs/android-debug-link.md) provides asynchronous,
+full-duplex timestamped messages through the debug Android bridge and `adb forward`.
+
 ## Branding and checks
 
 See [brand guidance](brand/README.md) for scale-specific assets and provenance.
