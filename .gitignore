@@ -27,6 +27,8 @@ Thumbs.db
 node_modules/
 Pods/
 .build/
+__pycache__/
+*.py[cod]
 
 # IDE
 *.swp
