@@ -29,6 +29,8 @@ Pods/
 .build/
 __pycache__/
 *.py[cod]
+*.pairing-key
+bridge.key
 
 # IDE
 *.swp

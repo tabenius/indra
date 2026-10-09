@@ -4,6 +4,39 @@ import time
 import unittest
 
 from debug.bridge import DebugLink, MAX_FRAME, SCHEMA
+from debug.auth import authenticate_server, pack, unpack
+
+KEY = b"test-pair-key-not-for-production!".ljust(32, b"!")[:32]
+
+
+class AuthReader:
+    def __init__(self, reader, key):
+        self.reader, self.key = reader, key
+
+    async def readline(self):
+        return json.dumps(unpack(await self.reader.readline(), self.key)).encode() + b"\n"
+
+    async def read(self):
+        return await self.reader.read()
+
+
+class AuthWriter:
+    def __init__(self, writer, key):
+        self.writer, self.key = writer, key
+
+    def write(self, frame):
+        try:
+            message = json.loads(frame)
+        except (ValueError, UnicodeError):
+            self.writer.write(frame)  # Deliberate malformed/oversized frames.
+        else:
+            self.writer.write(pack(message, self.key))
+
+    async def drain(self):
+        await self.writer.drain()
+
+    def close(self):
+        self.writer.close()
 
 
 def envelope(seq, kind="heartbeat", payload=None):
@@ -27,11 +60,12 @@ class DebugBridgeTests(unittest.IsolatedAsyncioTestCase):
         async def track(reader, writer):
             self.handlers.append(asyncio.current_task())
             self.writers.append(writer)
-            await handler(reader, writer)
+            receive_key, send_key = await authenticate_server(reader, writer, KEY)
+            await handler(AuthReader(reader, receive_key), AuthWriter(writer, send_key))
         server = await asyncio.start_server(track, "127.0.0.1", 0)
         self.addAsyncCleanup(server.wait_closed)
         self.addCleanup(server.close)
-        return await DebugLink.connect(port=server.sockets[0].getsockname()[1])
+        return await DebugLink.connect(port=server.sockets[0].getsockname()[1], key=KEY)
 
     async def test_unsolicited_events_and_concurrent_sends_have_timestamps(self):
         async def bridge(reader, writer):

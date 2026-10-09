@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import time
 from typing import Any
+
+from .auth import authenticate_client, load_key, pack, unpack
 
 SCHEMA = "ragbaz.debug/1"
 MAX_FRAME = 65536
@@ -36,10 +37,11 @@ class DebugLink:
     """
 
     def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter,
-                 queue_size: int = 128):
+                 send_key: bytes, receive_key: bytes, queue_size: int = 128):
         if queue_size < 1:
             raise ValueError("queue_size must be positive")
         self.reader, self.writer = reader, writer
+        self.send_key, self.receive_key = send_key, receive_key
         self.incoming: asyncio.Queue[dict[str, Any]] = asyncio.Queue(queue_size)
         self.outgoing: asyncio.Queue[tuple[bytes, asyncio.Future[None]]] = asyncio.Queue(queue_size)
         self.closed = asyncio.Event()
@@ -50,9 +52,16 @@ class DebugLink:
 
     @classmethod
     async def connect(cls, host: str = "127.0.0.1", port: int = 8769,
-                      queue_size: int = 128) -> DebugLink:
+                      queue_size: int = 128, *, key: bytes | None = None) -> DebugLink:
+        key = load_key() if key is None else key
         reader, writer = await asyncio.open_connection(host, port, limit=MAX_FRAME)
-        return cls(reader, writer, queue_size)
+        try:
+            send_key, receive_key = await authenticate_client(reader, writer, key)
+        except BaseException:
+            writer.close()
+            await writer.wait_closed()
+            raise
+        return cls(reader, writer, send_key, receive_key, queue_size)
 
     async def _until_closed(self, operation):
         action = asyncio.create_task(operation)
@@ -78,9 +87,7 @@ class DebugLink:
             if reply_to is not None:
                 message["reply_to"] = reply_to
             validate(message)
-            frame = json.dumps(message, allow_nan=False, separators=(",", ":")).encode() + b"\n"
-            if len(frame) > MAX_FRAME:
-                raise ValueError("debug frame exceeds 64 KiB")
+            frame = pack(message, self.send_key)
             receipt = asyncio.get_running_loop().create_future()
             await self._until_closed(self.outgoing.put((frame, receipt)))
             # Shield the receipt so caller cancellation does not cancel the writer.
@@ -105,7 +112,7 @@ class DebugLink:
                     raise EOFError("Android bridge disconnected")
                 if not frame.endswith(b"\n") or len(frame) > MAX_FRAME:
                     raise ValueError("invalid or oversized debug frame")
-                message = validate(json.loads(frame))
+                message = validate(unpack(frame, self.receive_key))
                 if message["seq"] <= last_seq:
                     raise ValueError("peer sequence must increase")
                 last_seq = message["seq"]
