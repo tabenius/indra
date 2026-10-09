@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Indra</title>
+  <desc id="desc">A domed net of large diamonds, joined by four golden faceted jewels.</desc>
+  <g fill="none" stroke="#123E3A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 176C32 108 76 48 128 48S224 108 224 176Q128 232 32 176Z"/>
+    <path d="M128 48L80 76L48 120L32 176M128 48L176 76L208 120L224 176M80 76L128 112L176 76M48 120L80 164L128 112L176 164L208 120M32 176L80 164L128 204L176 164L224 176"/>
+  </g>
+  <g fill="#E9B85C" stroke="#123E3A" stroke-width="3" stroke-linejoin="round">
+    <path d="M128 34L141 48L128 64L115 48Z"/>
+    <path d="M48 104L61 120L48 136L35 120Z"/>
+    <path d="M208 104L221 120L208 136L195 120Z"/>
+    <path d="M128 188L141 204L128 220L115 204Z"/>
+  </g>
+  <path d="M115 48H141M35 120H61M195 120H221M115 204H141" fill="none" stroke="#123E3A" stroke-width="2.5"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="title">
+  <title id="title">Indra compact icon</title>
+  <path fill="#123E3A" d="M0 0H32V32H0Z"/>
+  <g fill="none" stroke="#F6F3EA" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 22C5 14 10 7 16 7S27 14 27 22Q16 28 5 22Z"/>
+    <path d="M16 7L10 15L16 23L22 15L16 7M5 22L10 15M22 15L27 22"/>
+  </g>
+  <path fill="#E9B85C" d="M16 4L19 7L16 10L13 7ZM16 20L19 23L16 26L13 23Z"/>
+</svg>

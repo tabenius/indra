@@ -1,0 +1,13 @@
+{
+  "project": "Indra",
+  "upstream": "https://github.com/Lastoneparis/OSHI.git",
+  "base_revision": "6048720cafac4e72cb12267985197ce0d5d22f97",
+  "license": "MIT",
+  "local_branch": "indra",
+  "verified_identity_via": "https://oshi-messenger.com links to Lastoneparis/OSHI",
+  "source_scope": "Published cryptographic and mesh core and bot SDK; upstream README excludes application shell/UI",
+  "app_status": "no-installable-Indra-build",
+  "test_network_status": "planned-not-implemented",
+  "published_indra_repository": "https://github.com/tabenius/indra",
+  "published_indra_website": null
+}

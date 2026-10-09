@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Indra app icon</title>
+  <desc id="desc">A warm jewel net on a deep teal square, with generous space for launcher masks.</desc>
+  <path fill="#123E3A" d="M0 0H256V256H0Z"/>
+  <g transform="translate(28 28) scale(.78125)">
+    <g fill="none" stroke="#F6F3EA" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M32 176C32 108 76 48 128 48S224 108 224 176Q128 232 32 176Z"/>
+      <path d="M128 48L80 76L48 120L32 176M128 48L176 76L208 120L224 176M80 76L128 112L176 76M48 120L80 164L128 112L176 164L208 120M32 176L80 164L128 204L176 164L224 176"/>
+    </g>
+    <g fill="#E9B85C" stroke="#123E3A" stroke-width="3" stroke-linejoin="round">
+      <path d="M128 32L143 48L128 66L113 48ZM48 102L63 120L48 138L33 120ZM208 102L223 120L208 138L193 120ZM128 186L143 204L128 222L113 204Z"/>
+    </g>
+    <path d="M113 48H143M33 120H63M193 120H223M113 204H143" fill="none" stroke="#123E3A" stroke-width="2.5"/>
+  </g>
+</svg>
